@@ -5,13 +5,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Item {
     private final SimpleIntegerProperty ItemID = new SimpleIntegerProperty();
     private final SimpleStringProperty ItemName = new SimpleStringProperty();
     private final SimpleObjectProperty<Category> ItemCategory = new SimpleObjectProperty<>();
-    private final SimpleObjectProperty<Date> ItemExpireddate = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<LocalDate> ItemExpireddate = new SimpleObjectProperty<>();
 
     public int getItemID() {
         return ItemID.get();
@@ -49,15 +50,15 @@ public class Item {
         return ItemCategory;
     }
 
-    public Date getItemExpireddate() {
+    public LocalDate getItemExpireddate() {
         return ItemExpireddate.get();
     }
 
-    public void setItemExpireddate(Date itemExpireddate) {
+    public void setItemExpireddate(LocalDate itemExpireddate) {
         this.ItemExpireddate.set(itemExpireddate);
     }
 
-    public SimpleObjectProperty<Date> itemExpireddateProperty() {
+    public SimpleObjectProperty<LocalDate> itemExpireddateProperty() {
         return ItemExpireddate;
     }
 }
