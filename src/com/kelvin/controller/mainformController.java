@@ -130,20 +130,50 @@ public class mainformController implements Initializable {
 
     @FXML
     private void updateitemAction(ActionEvent actionEvent) {
-        Item i = tbItem.getSelectionModel().getSelectedItem();
-        i.setItemID(Integer.parseInt(txtID.getText().trim()));
-        i.setItemName(txtName.getText().trim());
-        i.setItemCategory(cbxCategory.getValue());
-        i.setItemExpireddate(dprExpireddate.getValue());
-        tbItem.refresh();
-        btnReset.setDisable(false);
-        btnSave.setDisable(false);
-        btnUpdate.setDisable(true);
-        txtID.setText("");
-        txtName.setText("");
-        cbxCategory.setValue(null);
-        dprExpireddate.setValue(null);
-        tbItem.setSelectionModel(null);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (!txtID.getText().trim().isEmpty() && cbxCategory.getValue() != null && !txtName.getText().trim().isEmpty() && dprExpireddate.getValue() != null) {
+            int result = 0;
+            int index = tbItem.getSelectionModel().getSelectedIndex();
+            for (Item _item : Items) {
+                if (txtName.getText().equalsIgnoreCase(_item.getItemName()) && txtID.getText().equalsIgnoreCase(String.valueOf(_item.getItemID())) && tbItem.getSelectionModel().getSelectedIndex()!=index) {
+                    alert.setContentText("Duplicate Item");
+                    alert.showAndWait();
+                    result = 1;
+                    break;
+                }
+                if (txtName.getText().equalsIgnoreCase(_item.getItemName()) && tbItem.getSelectionModel().getSelectedIndex()!=index) {
+                    alert.setContentText("Duplicate Item Name");
+                    alert.showAndWait();
+                    result = 1;
+                    break;
+                }
+                if (txtID.getText().equalsIgnoreCase(String.valueOf(_item.getItemID())) && tbItem.getSelectionModel().getSelectedIndex()!=index) {
+                    alert.setContentText("Duplicate Item ID");
+                    alert.showAndWait();
+                    result = 1;
+                    break;
+                }
+            }
+
+            if (result == 0) {
+                Item i = tbItem.getSelectionModel().getSelectedItem();
+                i.setItemID(Integer.parseInt(txtID.getText().trim()));
+                i.setItemName(txtName.getText().trim());
+                i.setItemCategory(cbxCategory.getValue());
+                i.setItemExpireddate(dprExpireddate.getValue());
+                tbItem.refresh();
+                btnReset.setDisable(false);
+                btnSave.setDisable(false);
+                btnUpdate.setDisable(true);
+                txtID.setText("");
+                txtName.setText("");
+                cbxCategory.setValue(null);
+                dprExpireddate.setValue(null);
+            }
+        } else {
+            alert.setContentText("Missing Fields Required");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -191,14 +221,18 @@ public class mainformController implements Initializable {
 
     @FXML
     private void selectAction(MouseEvent mouseEvent) {
-        if (!tbItem.getSelectionModel().getSelectedItem().getItemName().isEmpty()) {
-            btnUpdate.setDisable(false);
-            btnSave.setDisable(true);
-            btnReset.setDisable(true);
-            txtName.setText(tbItem.getSelectionModel().getSelectedItem().getItemName());
-            txtID.setText(String.valueOf(tbItem.getSelectionModel().getSelectedItem().getItemID()));
-            cbxCategory.setValue(tbItem.getSelectionModel().getSelectedItem().getItemCategory());
-            dprExpireddate.setValue(tbItem.getSelectionModel().getSelectedItem().getItemExpireddate());
+        try {
+            if (!tbItem.getSelectionModel().getSelectedItem().getItemName().isEmpty()) {
+                btnUpdate.setDisable(false);
+                btnSave.setDisable(true);
+                btnReset.setDisable(true);
+                txtName.setText(tbItem.getSelectionModel().getSelectedItem().getItemName());
+                txtID.setText(String.valueOf(tbItem.getSelectionModel().getSelectedItem().getItemID()));
+                cbxCategory.setValue(tbItem.getSelectionModel().getSelectedItem().getItemCategory());
+                dprExpireddate.setValue(tbItem.getSelectionModel().getSelectedItem().getItemExpireddate());
+            }
+        } catch (Exception E){
+            E.printStackTrace();
         }
     }
 }
